@@ -50,6 +50,7 @@
         function handleClear() {
           text.value = "";
           res_time.value = "";
+          res_msg.value = {};
           fileList.value = [];
         }
         const socket = io(":8001");
