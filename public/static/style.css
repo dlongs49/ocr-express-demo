@@ -1,0 +1,24 @@
+body {
+  width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+.out{
+  padding: 15px;
+  border-radius: 6px;
+  background: #eee;
+  border-top: 1px solid #ddd;
+}
+.time{
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+.btn{
+  text-align: center;
+  margin-top: 5px;
+}

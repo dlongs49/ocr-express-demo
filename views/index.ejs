@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ORC图片文字识别</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/element-plus@2.9.11.min.css" />
+    <script src="/static/vue@3.5.14.min.js"></script>
+    <script src="/static/element-plus@2.9.11.min.js"></script>
+    <script src="/static/element-plus-icon@2.3.1.min.js"></script>
+    <script src="/static/socket.io@4.8.1.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <el-upload
+        v-model:file-list="fileList"
+        drag
+        action="/upload"
+        :on-success="onSuccess"
+      >
+        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        <div class="el-upload__text">拖拽图片<em>或点击上传</em></div>
+      </el-upload>
+      <div class="time" v-if="res_msg.status">
+        <span v-if="res_msg.status == '正在识别文本' && res_msg.progress == 1">识别完成：{{ res_time }}</span>
+        <span v-else>
+          识别状态：{{ res_msg.status }}【{{(res_msg.progress * 100) + '%'}}】
+        </span>
+      </div>
+      <div v-if="text" class="out" v-html="text"></div>
+      <div class="btn" v-if="text">
+        <el-button type="success" @click="handleClear">清空</el-button>
+      </div>
+    </div>
+  </body>
+  <script>
+    const { createApp, ref } = Vue;
+    const App = {
+      components: {
+        UploadFilled: ElementPlusIconsVue.UploadFilled,
+      },
+      setup() {
+        const text = ref("");
+        const res_time = ref("");
+        const fileList = ref([]);
+        const res_msg = ref({});
+        function onSuccess(e) {
+          text.value = e.text;
+          res_time.value = e.res_time;
+        }
+        function handleClear() {
+          text.value = "";
+          res_time.value = "";
+          fileList.value = [];
+        }
+        const socket = io(":8001");
+        socket.on("msg", (e) => {
+          res_msg.value = e;
+        });
+        socket.on("connect_error", (err) => {
+          console.log(err);
+        });
+        return {
+          text,
+          res_time,
+          res_msg,
+          onSuccess,
+          fileList,
+          handleClear,
+        };
+      },
+    };
+    const app = createApp(App);
+    app.use(ElementPlus);
+    app.mount("#app");
+  </script>
+</html>
