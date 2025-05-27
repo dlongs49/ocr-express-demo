@@ -23,7 +23,7 @@
       <div class="time" v-if="res_msg.status">
         <span v-if="res_msg.status == '正在识别文本' && res_msg.progress == 1">识别完成：{{ res_time }}</span>
         <span v-else>
-          识别状态：{{ res_msg.status }}【{{(res_msg.progress * 100) + '%'}}】
+          识别状态：{{ res_msg.status }}【{{((res_msg.progress * 100).toFixed(2)) + '%'}}】
         </span>
       </div>
       <div v-if="text" class="out" v-html="text"></div>
